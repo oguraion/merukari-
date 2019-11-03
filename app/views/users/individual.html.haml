@@ -1,0 +1,100 @@
+- breadcrumb :individual, @user
+= render 'shared/header'
+
+%section.user-details
+  .user-details__profile-box
+    = link_to '#',class: 'user-details__profile-box__link' do
+      .user-details__profile-box__link__photo
+        - if @user.persisted? && @user.avatar?
+          = image_tag @user.avatar.to_s, class: 'user-details__profile-box__link__photo__image'
+        - else
+          = image_tag "//static.mercdn.net/images/member_photo_noimage_thumb.png", class: 'user-details__profile-box__link__photo__image'
+      %h2.user-details__profile-box__link__title
+        = @user.nickname
+
+    .user-details__profile-box__score
+      %span
+        評価数
+        = @user.late_count
+      %span
+        出品数
+        = @user.items.count
+
+      %span
+        %section.follow-stats
+          = render 'stats'
+
+      %span
+        %section.follow-button
+          = render 'follow_form' if user_signed_in?
+
+  .white
+    .white__users-ratings
+      .white__users-ratings__div
+        .white__users-ratings__div__detail.clearfix
+          %i.fa.fa-grin.icon-good
+          .white__users-ratings__div__detail__score
+            = @good_count
+
+      .white__users-ratings__div
+        .white__users-ratings__div__detail.clearfix
+          %i.fa.fa-meh.icon-normal
+          .white__users-ratings__div__detail__score
+            = @normal_count
+
+      .white__users-ratings__div
+        .white__users-ratings__div__detail.clearfix
+          %i.fa.fa-frown.icon-bad
+          .white__users-ratings__div__detail__score
+            = @bad_count
+
+    .white__description_box
+      - if @user.profile_text.present?
+        %p.font-2
+          = @user.profile_text
+
+      - else
+        %p.font-2
+          プロフィールはありません
+
+  .item-social-media-box
+    %ul.social-media-box
+      %li
+        = link_to '#',class: 'share-btn' do
+          %i.fab.fa-facebook-square
+      %li
+        = link_to '#', class: 'share-btn' do
+          %i.fab.fa-twitter
+      %li
+        = link_to '#', class: 'share-btn' do
+          %i.fab.fa-line
+
+
+  - if @user.items.present?
+    %section.items-box-container.clearfix
+      %h2.items-box-head この出品者の商品
+      .items-box-container__content.clearfix
+        - @user.items.each do |item|
+          %section.items-box
+            = link_to item_path(item), class: 'items-box__link' do
+              %figure.items-box__link__photo
+                - if item.item_images
+                  = image_tag item.item_images.first.image
+                  - if item.business_stats != 1
+                    .item-sold-out-badge
+                      %div SOLD
+              .items-box__body
+                %h3.items-box__body__name.font-2
+                  = item.name
+                .items-box__body__num.clearfix
+                  .items-box__body__num__price.font-5
+                    = "¥ #{thousands_separator(item.price)}"
+                  .items-box__body__num__likes
+                    %i.fa.fa-heart.icon-like-border
+                    %span
+                      = item.likes_count
+                  %p.items-box__body__num__tax (税込)
+
+= render 'shared/footer'
+
+= render 'shared/sell-button'

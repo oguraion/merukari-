@@ -1,0 +1,14 @@
+- breadcrumb :card_registration
+= render 'shared/header'
+
+%main.l-container
+  = render 'shared/l-side'
+
+  .right-content
+    %section.right-container
+      %h2.right-container__title クレジットカード情報入力
+      = render 'card-form'
+
+= render 'shared/sell-button'
+
+= render 'shared/footer'

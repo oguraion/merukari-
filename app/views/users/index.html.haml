@@ -1,0 +1,32 @@
+- breadcrumb :users
+= render 'shared/header'
+
+%main.l-container.clearfix
+  = render 'shared/l-side'
+  .l-content
+    %section.mypage-user-icon
+      = link_to individual_user_path(@user) do
+        %figure
+          - if current_user.persisted? && current_user.avatar?
+            = image_tag current_user.avatar.to_s, class: 'avatar_present_img'
+          - else
+            = image_tag "//static.mercdn.net/images/member_photo_noimage_thumb.png", alt: "", width: 60,height: "60"
+        %h2.bold
+          = @user.nickname
+        .mypage-number
+          %div
+            評価
+            %span.bold
+              = @user.late_count
+          %div
+            出品数
+            %span.bold
+              = @user.items.count
+
+    = render 'user-mypage-container'
+
+    = render 'user-item-status'
+
+= render 'shared/footer'
+
+= render 'shared/sell-button'

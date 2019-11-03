@@ -1,0 +1,207 @@
+.container
+
+  - breadcrumb :item_show, @item
+  = render 'shared/header'
+  = render 'delete-overlay'
+
+  %section.item-box-container.l-single-container
+    %h1.item-box-container__item-name
+      = @item.name
+    .item-box-container__main-content.clearfix
+      .item-box-container__main-content__photo
+        .owl-carousel.owl-loaded.owl-drag
+          .owl-stage-outer
+            .owl-stage{ style: 'left:0px',width: '900px'}
+              - @item.item_images.each do |i|
+                - if i.image.present?
+                  .owl-item{ style: 'width:300px'}
+                    .owl-item__inner.is-higher-width
+                      = image_tag i.image
+
+          .owl-dots
+            - if @item.item_images.present?
+              - @item.item_images.each do |i|
+                .owl-dot
+                  .owl-dot-inner
+                    = image_tag i.image
+
+          - if @item.business_stats != 1
+            .item-sold-out-badge
+              %div SOLD
+
+      %table.item-box-container__main-content__item-detail-table
+        %tbody
+          %tr
+            %th 出品者
+            %td
+              = link_to individual_user_path(@item.user) do
+                = @item.user.nickname
+              %div
+                .item-user-ratings
+                  %i.fa.fa-grin.icon-good
+                  %span
+                    = @good_count
+                .item-user-ratings
+                  %i.fa.fa-meh.icon-normal
+                  %span
+                    = @normal_count
+                .item-user-ratings
+                  %i.fa.fa-frown.icon-bad
+                  %span
+                    = @bad_count
+
+          %tr
+            %th カテゴリー
+            %td
+              = link_to category_path(@parent_category.id) do
+                %div
+                  = @parent_category.name
+              - if @child_category
+                = link_to category_path(@children_category.id) do
+                  .item-detail-table-sub-category
+                    = fa_icon 'angle-right'
+                    = @children_category.name
+              - if @grand_category
+                = link_to category_path(@grand_category.id) do
+                  .item-detail-table-sub-sub-category
+                    = fa_icon 'angle-right'
+                    = @grand_category.name
+
+
+          %tr
+            %th ブランド
+            %td
+              = link_to '#' do
+                %div
+                  = @item.brand.name if @item.brand
+
+          %tr
+            %th 商品の状態
+            %td
+              = @item.state
+
+          %tr
+            %th 配送料の負担
+            %td
+              = @item.postage
+
+          %tr
+            %th 配送の方法
+            %td
+              = @item.shipping_way
+
+          %tr
+            %th 配送元地域
+            %td
+              = link_to @region.name , '#'
+
+          %tr
+            %th 発送の目安
+            %td
+              = @item.shipping_date
+
+    .item-price-box.text-center
+      %span.item-price.bold
+        = "¥ #{thousands_separator(@item.price)}"
+      %span.item-tax          (税込)
+      %span.item-shipping-fee 送料込み
+
+    - if @item.business_stats != 1
+      .item-buy-btn.disabled
+        売り切れました
+
+    - elsif @item.user_id != current_user&.id && @item.business_stats == 1
+      = link_to buy_item_path(@item) , class: 'item-btn-client item-buy-btn' do
+        %div{"data-client":"visible"} 購入画面に進む
+
+    .item-description
+      %p.item-description__inner
+        = @item.explain
+
+    .item-button-container.clearfix
+      .item-button-left
+        %div{id: "likes_buttons_#{@item.id}",class: 'item-button item-button-like'}
+          = render partial: 'shared/like', locals: { item: @item, likes: @likes}
+
+        = link_to '#',class: 'item-button item-button-report clearfix' do
+          %i.fa.fa-flag.flag
+          %span.flag-text 適切な商品の報告
+
+      .item-button-right
+        = link_to '#' do
+          %i.fa.fa-unlock
+          %span あんしん・あんぜんへの取り組み
+
+  - if @item.user_id == current_user&.id
+    .listening-item-change-box
+      = link_to '商品の編集',edit_item_path(@item),class: 'btn-default btn-red'
+      %p.text-center or
+      = form_for @item, method: 'POST' do |f|
+        = f.submit "出品を一旦停止する",class: 'btn-default btn-gray', id: 'stop-item'
+      = button_tag type: 'button', class: 'btn-default btn-gray',id: 'delete-item',style: {"touch-action":"manipulation"}, remote: true do
+        この商品を削除する
+
+  .item-detail-message
+    .message-container
+      - if @comments.present?
+        .message-content
+          %ul.message-items
+            = render partial: 'user_comments',locals: { item: @item, comments: @comments}
+
+      - if user_signed_in?
+        .message-content
+          %p 相手のことを考え丁寧なコメントを心がけましょう。不快な言葉遣いなどは利用制限や退会処分となることがあります。
+          = form_for [@item, @comment] do |c|
+            - if @item.business_stats == 1
+              = c.text_area :text,required: "required", class: 'textarea-default'
+              = c.submit "コメントする", data: { disable_with: "送信中..." },class: 'message-submit btn-default btn-gray',id: "new-comment-submit"
+            - else
+              = c.text_area :text, class: 'textarea-default disabled'
+              = c.submit "売り切れのためコメントできません",:disabled => true, class: 'message-submit btn-default btn-gray'
+
+
+  %ul.nav-item-link-prev-next.clearfix
+    %li.nav-item-link-prev
+      = link_to '#' do
+        = fa_icon 'angle-left'
+        ディズニーヴィランズ 2個セット バッジ バッチ Villains 2018
+
+    %li.nav-item-link-next
+      = link_to '#' do
+        バーにかかってきた電話/東 直己
+        = fa_icon 'angle-right'
+
+  .item-social-media-box
+    .text-center
+      %ul.social-media-box
+        %li
+          = link_to '#', class: 'share-btn','target':'_blank' do
+            %i.fab.fa-facebook-square.icon-facebook
+          = link_to '#', class: 'share-btn','target':'_blank' do
+            %i.fab.fa-twitter.icon-twitter
+          = link_to '#', class: 'share-btn','target':'_blank' do
+            %i.fab.fa-google.icon-google
+
+  .items-in-user-profile
+    - if @user_items.present?
+      %section.items-box-container.items-box-overflow.items-in-user-profile.clearfix
+        %h2.item-box-head
+          = link_to "#{@item.user.nickname}さんのその他の出品", individual_user_path(@item.user)
+        .items-box-content.clearfix
+          = render 'user_others_items'
+
+    %section.items-box-container.items-box-overflow.items-in-user-profile.clearfix
+      %h2.item-box-head
+        //ブランドがあり孫あり(優先)
+        - if @grand_category_items
+          = link_to "ブランドの#{@grand_category.name}その他の商品", category_path(@grand_category)
+        //ブランドがあり孫なし
+        - if @child_category_items
+          = link_to "ブランドの#{@children_category.name}その他の商品", category_path(@children_category)
+
+
+      .items-box-content.clearfix
+        = render 'other_category_items'
+
+
+  = render 'shared/footer'

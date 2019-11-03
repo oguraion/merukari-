@@ -1,0 +1,14 @@
+- breadcrumb :logout
+= render 'shared/header'
+
+%main.l-container
+  = render 'shared/l-side'
+
+  .l-content
+    .chapter-container
+      %form.chapter-container__single-inner
+        .chapter-container__single-inner__content
+          = link_to "ログアウト", destroy_user_session_path, method: :delete,class: 'btn-default btn-red'
+
+= render 'shared/footer'
+= render 'shared/sell-button'

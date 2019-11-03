@@ -1,0 +1,191 @@
+.single-container
+  = render 'users/user_header'
+  %main.single-main
+    %section.l-single-container.buy-item-container
+      #sell-container
+        .data-reactroot
+          .sell-container-inner
+            %h2.l-single-head 商品の情報を入力
+            = form_for @item , html: {class: 'sell-form'} do |f|
+              .sell-upload-box
+                %h3.sell-upload-head
+                  出品画像
+                  %span.form-require 必須
+                %p 最大10枚までアップロードできます
+                .sell-dropbox-container.clearfix.state-image-number-10
+                  .sell-upload-items-container
+                    .sell-upload-items
+                      %ul.pictures
+                        - @item.item_images.each_with_index do |i,index|
+                          - if i.image.present?
+                            %li.sell-upload-item{id: "pre#{index}"}
+                              %figure.sell-upload-figure.landscape
+                                = image_tag i.image,class: "preview"
+                              .sell-upload-button
+                                = link_to '編集','#', class: 'sell-upload-edit'
+                                = link_to '削除','#',id: "sell-upload-delete"
+
+                    = f.fields_for :item_images do |image|
+                      = image.label :image, class: 'form-mask-image box-display-none' do
+                        .sell-upload-drop-box
+                          = image.file_field :image,class: 'hidden file'
+                          %pre.visible-pc
+                            ドラッグアンドドロップ
+                            またはクリックしてファイルをアップロード
+
+              - if flash[:image]
+                %ul.has-error-text
+                  %li
+                    = flash[:image]
+
+
+              .sell-content
+                .form-group
+                  %label
+                    商品名
+                    %span.form-require 必須
+
+                  %div
+                    = f.text_field :name,class: 'input-default',placeholder: '商品名（必須 40文字まで)'
+                  - if flash[:name]
+                    %ul.has-error-text
+                      %li
+                        = flash[:name]
+
+                  .form-group
+                    %label
+                      商品の説明
+                      %span.form-require 必須
+                    = f.text_area :explain, class: 'textarea-default', value: @item.explain,placeholder: '商品の説明ありません'
+                    - if flash[:explain]
+                      %ul.has-error-text
+                        %li
+                          = flash[:explain]
+
+              .sell-content.clearfix
+                %h3.sell-sub-head 商品の詳細
+                .sell-form-box
+                  .form-group
+                    %label
+                      カテゴリ
+                      %span.form-require 必須
+                  %div
+                    .select-wrap.category
+                      = f.select :category_id, @category.map{ |category| [category.name, category.id, {class: "#{category.id}"} ] }, {:include_blank => '---'}, id: "category1-select"
+                      = fa_icon "angle-down"
+                    .select-wrap.child-category#category2
+                      = f.select :child_category_id, @child_category.map{ |category| [category.name, category.id, {class: "#{category.main_category_id}"} ] }, {:include_blank => '---'}, id: "category2-select"
+                      = fa_icon "angle-down"
+                    .select-wrap.grand-child-category#category3
+                      = f.select :grand_child_category_id, @grand_child_category.map{ |category| [category.name, category.id, {class: "#{category.sub_category_id}"} ] }, {:include_blank => '---'}, id: "category3-select"
+                      = fa_icon "angle-down"
+
+                    - if flash[:category]
+                      %ul.has-error-text
+                        %li
+                          = flash[:category]
+
+                    .form-group
+                      %label
+                        商品の状態
+                        %span.form-require 必須
+                      .select-wrap
+                        = f.select :state, Item.states_i18n.invert,{include_blank: '---'}
+                        = fa_icon 'angle-down'
+                      - if flash[:state]
+                        %ul.has-error-text
+                          %li
+                            = flash[:state]
+
+              .sell-content.clearfix
+                %h3.sell-sub-head 配送について
+                %figure.form-question ?
+                .sell-form-box
+                  .form-group
+                    %label
+                      配送料の負担
+                      %span.form-require 必須
+                    .select-wrap
+                      = f.select :postage, Item.postages_i18n.invert, {include_blank: '---'}
+                      = fa_icon 'angle-down'
+                    - if flash[:postage]
+                      %ul.has-error-text
+                        %li
+                          = flash[:postage]
+
+                  .form-group
+                    %label
+                      発送元の地域
+                      %span.form-require 必須
+                    .select-wrap
+                      = f.collection_select :region, Prefecture.all, :id, :name,{include_blank: '---'} ,{class: "select-default"}
+                      = fa_icon 'angle-down'
+                    - if flash[:region]
+                      %ul.has-error-text
+                        %li
+                          = flash[:region]
+                  .form-group
+                    %label
+                      配達の方法
+                      %span.form-require 必須
+                    .select-wrap
+                      = f.select :shipping_way,Item.shipping_ways_i18n.invert, {include_blank: '---'}
+                      = fa_icon 'angle-down'
+                    - if flash[:shipping_way]
+                      %ul.has-error-text
+                        %li
+                          = flash[:shipping_way]
+                  .form-group
+                    %label
+                      発送までの日数
+                      %span.form-require 必須
+                    .select-wrap
+                      = f.select :shipping_date, Item.shipping_dates_i18n.invert,{include_blank: '---'}
+                      = fa_icon 'angle-down'
+
+                    - if flash[:shipping_date]
+                      %ul.has-error-text
+                        %li
+                          = flash[:shipping_date]
+
+              .sell-content
+                %h3.sell-sub-head 販売価格(300〜9,999,999)
+                = link_to '?','#',class: 'form-question'
+                .sell-form-box
+                  %ul.sell-price
+                    %li.form-group
+                      .clearfix
+                        %label.l-left
+                          価格
+                          %span.form-require 必須
+                        .l-right.sell-price-input
+                          ¥
+                          .input-price
+                            = f.text_field :price,class: 'input-default',value: @item.price,placeholder: '例）300'
+                      - if flash[:price]
+                        %ul.has-error-text
+                          %li
+                            = flash[:price]
+
+                    %li.clearfix
+                      .l-left 販売手数料(10%)
+                      .l-right.commission
+                        - if @item.price != nil
+                          = "¥ #{thousands_separator(commission(@item.price))}"
+                        - else
+                          ー
+
+                    %li.clearfix.bold
+                      .l-left 販売利益
+                      .total-right.profits
+                        - if @item.price != nil
+                          = "¥ #{thousands_separator(profits(@item.price))}"
+                        - else
+                          ー
+
+
+              .sell-content.sell-btn-box
+                = f.submit '変更する',class: 'btn-default btn-red',data: { disable_with: "更新中..." }
+                = link_to 'キャンセル',item_path(@item),class: 'btn-default btn-gray'
+
+  = render 'users/user_footer'

@@ -1,0 +1,349 @@
+.l-content {
+  width: 700px;
+  float: right;
+  .icon-good {
+    color: #ef5185;
+  }
+  .icon-normal {
+    color: #fba933;
+  }
+  .icon-bad {
+    color: #6ab5d8;
+  }
+  .mypage-user-icon {
+    background-image: image-url("mypage.jpg");
+    padding: 20px;
+    background-size: cover;
+    text-align: center;
+    height: 200px;
+    position: relative;
+    a {
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      color: $light_black;
+      transform: translate(0, -50%);
+      figure {
+        overflow: hidden;
+        width: 60px;
+        height: 60px;
+        margin: 0 auto;
+        border-radius: 50%;
+        display: block;
+        img {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+      }
+      h2 {
+        display: inline-block;
+        margin-top: 0.83em;
+        font-weight: bold;
+      }
+      .mypage-number {
+        margin-top: 0.83em;
+        div {
+          display: inline-block;
+          font-weight: 14px;
+        }
+        div:last-child {
+          margin-left: 16px;
+        }
+        .bold {
+          margin-left: 8px;
+          font-size: 16px;
+          font-weight: 600;
+        }
+      }
+    }
+    a:hover {
+      opacity: 0.7;
+      h2 {
+        border-bottom: 1px solid black;
+        margin-bottom: -1px;
+      }
+    }
+  }
+  .mypage-tab-container {
+    background: $white;
+    &__tabs {
+      background: $light_gray;
+      font-size: 0;
+      font-weight: bold;
+      border: 0;
+      .active {
+        background: $white;
+        border-top: $border_red;
+      }
+      li:hover {
+        opacity: 0.7;
+      }
+      .two-tabs {
+        width: 50%;
+      }
+      .three-tabs {
+        width: 33.3%;
+      }
+      .four-tabs {
+        width: 25%;
+        i {
+          display: inline-block;
+          font-size: 16px;
+          line-height: 72px;
+          margin-right: 3px;
+        }
+      }
+      .two-tabs,.three-tabs,.four-tabs {
+        display: inline-block;
+        text-align: center;
+        vertical-align: top;
+        h3 {
+          display: inline-block;
+          font-size: 22px;
+          a, span {
+            display: block;
+            color: $light_black;
+            font-size: 16px;
+            line-height: 72px;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+  .tab-content {
+    &__mypage-item {
+      display: block;
+      .mypage-item-not-found {
+        padding: 160px 0 60px;
+        background: url("https://www.mercari.com/jp/assets/img/common/common/logo-gray-icon.svg?82208132");
+        background-repeat: no-repeat;
+        background-position: center 40px;
+        background-size: 78px 85px;
+        text-align: center;
+        font-size: 16px;
+        color: #ccc;
+        font-weight: bold;
+      }
+      li {
+        position: relative;
+        border-bottom: $border_light_gray;
+      }
+      li:last-child {
+        border: 0;
+      }
+      &__link {
+        display: block;
+        min-height: 80px;
+        padding: 16px;
+        color: $light_black;
+        position: relative;
+        .angle {
+          font-size: 25px;
+          position: absolute;
+          top: 50%;
+          right: 16px;
+          -webkit-transform: translate(0, -50%);
+          transform: translate(0, -50%);
+        }
+        figure {
+          position: relative;
+          overflow: hidden;
+          float: left;
+          width: 48px;
+          height: 48px;
+          img {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+          }
+        }
+        &__body {
+          margin: 0 40px 0 68px;
+          &__text {
+            line-height: 1.5;
+            font-family: inherit;
+          }
+          time {
+            display: inline-block;
+            color: #888;
+            .fa-clock-o {
+              margin-right: 8px;
+            }
+            span {
+              vertical-align: middle;
+            }
+          }
+        }
+        .fa-angle-right {
+          font-size: 25px;
+          position: absolute;
+          top: 50%;
+          right: 16px;
+          -webkit-transform: translate(0, -50%);
+          transform: translate(0, -50%);
+        }
+      }
+      &__link:hover {
+        background-color: #f8f8f8;
+      }
+      .mypage-go-list {
+        border: 0;
+        padding: 16px;
+        a {
+          display: block;
+          height: 56px;
+          margin: 0 auto;
+          background: $light_gray;
+          color: $light_black;
+          line-height: 56px;
+          text-align: center;
+        }
+      }
+    }
+  }
+  .mypage-tab-container-bottom {
+    margin-top: 40px;
+    background: $white;
+    &__head {
+      padding: 0 4%;
+      background: #fafafa;
+      font-size: 16px;
+      line-height: 72px;
+      font-weight: bold;
+    }
+    .likes-page {
+      font-weight: bold;
+      text-align: center;
+      font-size: 25px;
+    }
+    .tab-content {
+      .mypage-item-list {
+        .mypage-item-lists:hover {
+          opacity: 0.7;
+          background-color: #eee;
+        }
+        .mypage-item-lists {
+          li {
+            border-bottom: 1px solid #eee;
+          }
+          .item-sold-out-badge {
+            &::after {
+              border-width: 40px 40px 0 0;
+              border-color: $red transparent ;
+              display: block;
+              content: '';
+              position: absolute;
+              top: 16px;
+              left: 16px;
+              z-index: 1;
+              width: 0;
+              height: 0;
+              border-style: solid;
+            }
+            div {
+              position: absolute;
+              left: 0;
+              z-index: 2;
+              color: $white;
+              transform: rotate(-45deg);
+              letter-spacing: 1px;
+              font-weight: 600;
+              top: 25px;
+              left: 15px;
+              font-size: 6px;
+              font-family: inherit;
+            }
+          }
+          &__link {
+            position: relative;
+            display: block;
+            min-height: 80px;
+            padding: 16px;
+            color: #333;
+            .mypage-item-lists-icon {
+              position: absolute;
+              top: 50%;
+              right: 16px;
+              transform: translate(0, -50%);
+              font-weight: bold;
+              font-size: 20px;
+            }
+            .mypage-item-lists-icon:before {
+              content: "\f105";
+            }
+            figure {
+              position: relative;
+              overflow: hidden;
+              float: left;
+              width: 48px;
+              height: 48px;
+              img {
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                z-index: 1;
+                height: 50px;
+                width: 50px;
+              }
+            }
+          }
+          &__body {
+            margin: 0 40px 0 68px;
+            &--text {
+              overflow: hidden;
+              display: block;
+              display: -webkit-box;
+              max-height: 4.4em;
+              text-overflow: ellipsis;
+              line-height: 1.5;
+              .icon-time {
+                margin-right: 4px;
+              }
+            }
+          }
+          &__status {
+            display: inline-block;
+            margin: 8px 0 0 0;
+            padding: 5px 6px;
+            border-radius: 2px;
+            font-size: 12px;
+            color: #fff;
+            font-weight: 600;
+          }
+          .trading {
+            background: #ea352d;
+          }
+          .done {
+            background: #888;
+          }
+          .awaiting {
+            background: #0099e8;
+          }
+        }
+      }
+      .mypage-item-not-found {
+        padding: 160px 0 60px;
+        background: url("https://www.mercari.com/jp/assets/img/common/common/logo-gray-icon.svg?82208132");
+        background-repeat: no-repeat;
+        background-position: center 40px;
+        background-size: 78px 85px;
+        text-align: center;
+        font-size: 16px;
+        color: #ccc;
+        font-weight: bold;
+      }
+    }
+  }
+}

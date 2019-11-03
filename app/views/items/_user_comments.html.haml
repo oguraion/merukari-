@@ -1,0 +1,92 @@
+- comments.each_with_index do |comment, i|
+  = render partial: 'delete-comment-overlay',locals: {item: item, comment: comment}
+  - if comment.no_comment == 1 && comment.user_id != item.user_id
+    %li.message-left
+      .message-user
+        %figure
+          .message-user-unknown
+            = image_tag '//www-mercari-jp.akamaized.net/assets/img/common/common/user-icon.svg?2845599746'
+          %figcaption.bold
+      .message-body
+        .message-body-text{id: "comment_id_#{i}"} 出品者がコメントを削除しました
+        .message-icons.clearfix
+          %time.message-icon-left
+            %i.fa.fa-clock-o
+            %span
+              = time_ago_in_words(comment.created_at)+"前"
+        %i.fa.fa-caret-left
+  - elsif comment.no_comment == 1 && comment.user_id == item.user_id
+    %li.message-right
+      .message-user
+        %figure
+          .message-user-unknown
+            = image_tag '//www-mercari-jp.akamaized.net/assets/img/common/common/user-icon.svg?2845599746'
+          %figcaption.bold
+      .message-body
+        .message-body-text{id: "comment_id_#{i}"} 出品者がコメントを削除しました
+        .message-icons.clearfix
+          %time.message-icon-left
+            %i.fa.fa-clock-o
+            %span
+              = time_ago_in_words(comment.created_at)+"前"
+        %i.fa.fa-caret-left
+
+  - else
+    - if comment.user_id != item.user_id
+      %li.message-left
+        = link_to '#', class: 'message-user' do
+          %figure
+            %div
+              - if comment.user.persisted? && comment.user.avatar?
+                = image_tag comment.user.avatar.to_s, class: 'avatar_present_img'
+              - else
+                = image_tag "//static.mercdn.net/images/member_photo_noimage_thumb.png", alt: ""
+            %figcaption.bold
+              = comment.user.nickname
+        .message-body
+          .message-body-text
+            = comment.text
+          .message-icons.clearfix
+            %time.message-icon-left
+              %i.fa.fa-clock-o
+              %span
+                = time_ago_in_words(comment.created_at)+"前"
+            .message-icon-right
+              %form
+                %button{ type: 'submit'}
+                  %i.fa.fa-flag
+              - if current_user&.id == item.user_id
+                .delete-comment
+                  = button_tag type: 'button',id: "delete-comment-btn_#{comment.id}",class: "delete-comment-btn",style: {"touch-action":"manipulation"}, remote: true do
+                    %i.fa.fa-trash
+          %i.fa.fa-caret-left
+
+    - else
+      %li.message-right
+        = link_to '#', class: 'message-user' do
+          %figure
+            %div
+              - if comment.user.persisted? && comment.user.avatar?
+                = image_tag comment.user.avatar.to_s, class: 'avatar_present_img'
+              - else
+                = image_tag "//static.mercdn.net/images/member_photo_noimage_thumb.png", alt: ""
+            %figcaption.bold
+              = comment.user.nickname
+          .message-is-seller 出品者
+        .message-body
+          .message-body-text
+            = comment.text
+          .message-icons.clearfix
+            %time.message-icon-left
+              %i.fa.fa-clock-o
+              %span
+                = time_ago_in_words(comment.created_at)+"前"
+            .message-icon-right
+              %form
+                %button{ type: 'submit'}
+                  %i.fa.fa-flag
+              - if current_user&.id == item.user_id
+                .delete-comment
+                  = button_tag type: 'button',id: "delete-comment-btn_#{comment.id}",class: "delete-comment-btn",style: {"touch-action":"manipulation"}, remote: true do
+                    %i.fa.fa-trash
+          %i.fa.fa-caret-left
